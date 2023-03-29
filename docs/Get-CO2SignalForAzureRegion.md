@@ -80,7 +80,7 @@ You will also need a connected Azure PowerShell session.
 
 [https://github.com/cloudyspells/PSElectricityMaps/wiki/Get-ElectricityMapsForAzureRegion](https://github.com/cloudyspells/PSElectricityMaps/wiki/Get-ElectricityMapsForAzureRegion)
 
-[https://docs.ElectricityMaps.com/#get-latest-by-geographic-coordinate](https://docs.ElectricityMaps.com/#get-latest-by-geographic-coordinate)
+[https://docs.co2signal.com/#get-latest-by-geographic-coordinate](https://docs.co2signal.com/#get-latest-by-geographic-coordinate)
 
 [https://docs.microsoft.com/en-us/powershell/module/az.resources/get-azlocation?view=azps-6.4.0](https://docs.microsoft.com/en-us/powershell/module/az.resources/get-azlocation?view=azps-6.4.0)
 

@@ -18,13 +18,13 @@
     "westeurope", "northeurope", "eastus" | Get-ElectricityMapsBestAzureRegion -AuthToken $token
 
     .NOTES
-    You will need to register an account for an API token from https://www.ElectricityMaps.com/ to use this function.
+    You will need to register an account for an API token from https://www.co2signal.com/ to use this function.
 
     .LINK
     https://github.com/cloudyspells/PSElectricityMaps/wiki/Get-ElectricityMapsBestAzureRegion
 
     .LINK
-    https://docs.ElectricityMaps.com/#get-latest-by-geographic-coordinate
+    https://docs.co2signal.com/#get-latest-by-geographic-coordinate
 
     .LINK
     https://docs.microsoft.com/en-us/powershell/module/az.resources/get-azlocation?view=azps-6.4.0

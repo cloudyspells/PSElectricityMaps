@@ -18,13 +18,13 @@
     "westeurope" | Get-ElectricityMapsForAzureRegion -AuthToken $token
 
     .NOTES
-    You will need to register an account for an API token from https://www.ElectricityMaps.com/ to use this function. You will also need a connected Azure PowerShell session.
+    You will need to register an account for an API token from https://www.co2signal.com/ to use this function. You will also need a connected Azure PowerShell session.
 
     .LINK
     https://github.com/cloudyspells/PSElectricityMaps/wiki/Get-ElectricityMapsForAzureRegion
 
     .LINK
-    https://docs.ElectricityMaps.com/#get-latest-by-geographic-coordinate
+    https://docs.co2signal.com/#get-latest-by-geographic-coordinate
 
     .LINK
     https://docs.microsoft.com/en-us/powershell/module/az.resources/get-azlocation?view=azps-6.4.0
@@ -72,7 +72,7 @@ function Get-ElectricityMapsForAzureRegion {
     $long = $location.Longitude
     Write-Verbose "Found Latitude: $lat"
     Write-Verbose "Found Longitude: $long"
-    $uri = "https://api.ElectricityMaps.com/v1/latest?lat=$lat&lon=$long"
+    $uri = "https://api.co2signal.com/v1/latest?lat=$lat&lon=$long"
     $headers = @{
         "auth-token" = $AuthToken
     }
