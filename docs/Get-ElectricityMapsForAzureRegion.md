@@ -1,7 +1,7 @@
 # Get-ElectricityMapsForAzureRegion
 
 ## SYNOPSIS
-Get CO2 Signal value for Azure Region
+Get ElectricityMaps value for Azure Region
 
 ## SYNTAX
 
@@ -10,7 +10,7 @@ Get-ElectricityMapsForAzureRegion [-Region] <String> [-AuthToken] <String> [<Com
 ```
 
 ## DESCRIPTION
-Retrieves the CO2 Signal value for the specified Azure Region.
+Retrieves the ElectricityMaps value for the specified Azure Region.
 
 ## EXAMPLES
 
@@ -27,7 +27,7 @@ Get-ElectricityMapsForAzureRegion -Region "westeurope" -AuthToken $token
 ## PARAMETERS
 
 ### -Region
-The Azure Region to get the CO2 Signal value for.
+The Azure Region to get the ElectricityMaps value for.
 
 ```yaml
 Type: String
@@ -42,7 +42,7 @@ Accept wildcard characters: False
 ```
 
 ### -AuthToken
-The CO2 Signal API token to use for authentication.
+The ElectricityMaps API token to use for authentication.
 
 ```yaml
 Type: String
@@ -62,16 +62,16 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## INPUTS
 
 ### System.String
-### - The Azure Region to get the CO2 Signal value for.
+### - The Azure Region to get the ElectricityMaps value for.
 ## OUTPUTS
 
 ### System.Management.Automation.PSObject
-### - Timestamp: The timestamp of the CO2 Signal data.
+### - Timestamp: The timestamp of the ElectricityMaps data.
 ### - CarbonIntensity: The carbon intensity of the electricity.
 ### - CarbonIntensityUnit: The unit of measure of the carbon intensity value.
 ### - FossilFuelPercentage: The percentage of fossil fuel used to generate electricity.
 ### - Region: The Azure Region.
-### - CountryCode: The country location code from CO2 Signal.
+### - CountryCode: The country location code from ElectricityMaps.
 ## NOTES
 You will need to register an account for an API token from https://www.co2signal.com/ to use this function.
 You will also need a connected Azure PowerShell session.

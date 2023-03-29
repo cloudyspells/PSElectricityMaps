@@ -1,15 +1,15 @@
 <#
     .SYNOPSIS
-    Get CO2 Signal value for Azure Region
+    Get ElectricityMaps value for Azure Region
 
     .DESCRIPTION
-    Retrieves the CO2 Signal value for the specified Azure Region.
+    Retrieves the ElectricityMaps value for the specified Azure Region.
 
     .PARAMETER Region
-    The Azure Region to get the CO2 Signal value for.
+    The Azure Region to get the ElectricityMaps value for.
 
     .PARAMETER AuthToken
-    The CO2 Signal API token to use for authentication.
+    The ElectricityMaps API token to use for authentication.
 
     .EXAMPLE
     Get-ElectricityMapsForAzureRegion -Region "westeurope" -AuthToken $token
@@ -31,16 +31,16 @@
 
     .INPUTS
     System.String
-    - The Azure Region to get the CO2 Signal value for.
+    - The Azure Region to get the ElectricityMaps value for.
 
     .OUTPUTS
     System.Management.Automation.PSObject
-    - Timestamp: The timestamp of the CO2 Signal data.
+    - Timestamp: The timestamp of the ElectricityMaps data.
     - CarbonIntensity: The carbon intensity of the electricity.
     - CarbonIntensityUnit: The unit of measure of the carbon intensity value.
     - FossilFuelPercentage: The percentage of fossil fuel used to generate electricity.
     - Region: The Azure Region.
-    - CountryCode: The country location code from CO2 Signal.
+    - CountryCode: The country location code from ElectricityMaps.
 #>
 function Get-ElectricityMapsForAzureRegion {
     [CmdletBinding()]
@@ -48,7 +48,7 @@ function Get-ElectricityMapsForAzureRegion {
         [Parameter(
             Mandatory = $true,
             ValueFromPipeline = $true,
-            HelpMessage = "The Azure Region to get the CO2 Signal value for."
+            HelpMessage = "The Azure Region to get the ElectricityMaps value for."
             )]
         [ValidateNotNullOrEmpty()]
         [string]
@@ -56,7 +56,7 @@ function Get-ElectricityMapsForAzureRegion {
 
         [Parameter(
             Mandatory = $true,
-            HelpMessage = "The CO2 Signal API token to use for authentication."
+            HelpMessage = "The ElectricityMaps API token to use for authentication."
             )]
         [ValidateNotNullOrEmpty()]
         [string]
@@ -76,9 +76,9 @@ function Get-ElectricityMapsForAzureRegion {
     $headers = @{
         "auth-token" = $AuthToken
     }
-    Write-Verbose "Calling CO2 Signal API: $uri"
+    Write-Verbose "Calling ElectricityMaps API: $uri"
     $response = Invoke-RestMethod -Uri $uri -Headers $headers -Method Get -ContentType "application/json"
-    Write-Verbose "CO2 Signal API response: $response"
+    Write-Verbose "ElectricityMaps API response: $response"
     return New-Object psobject -Property @{ 
         CarbonIntensity = $response.data.carbonIntensity 
         CarbonIntensityUnit = $response.units.carbonIntensity
