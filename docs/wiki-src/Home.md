@@ -9,7 +9,6 @@ PowerShell module for [ElectricityMaps.com](https://www.ElectricityMaps.com/) AP
 ![PowerShell Gallery Version](https://img.shields.io/powershellgallery/v/PSElectricityMaps)
 ![PowerShell Gallery](https://img.shields.io/powershellgallery/dt/PSElectricityMaps)
 
-
 This PowerShell module is intended for retrieving emissions data from
 [ElectricityMaps](https://www.ElectricityMaps.com/) for a supplied Azure Region during
 resource deployments. This is a lightweight solution making use of only the

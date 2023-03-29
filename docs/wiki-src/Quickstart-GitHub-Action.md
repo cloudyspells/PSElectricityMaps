@@ -20,7 +20,6 @@ _co2signal.com_ and will be updated by the author as migration proceeds.
 - `region` - The Azure region with the lowest emissions
 - `fosilFuelPercentage` - The percentage of energy in the region that is fossil fuel based
 
-
 ## Example
 
 ```yaml
