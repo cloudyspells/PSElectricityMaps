@@ -73,7 +73,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### - Region: The Azure Region.
 ### - CountryCode: The country location code from CO2 Signal.
 ## NOTES
-You will need to register an account for an API token from https://www.ElectricityMaps.com/ to use this function.
+You will need to register an account for an API token from https://www.co2signal.com/ to use this function.
 
 ## RELATED LINKS
 
