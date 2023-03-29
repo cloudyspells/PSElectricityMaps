@@ -13,7 +13,7 @@ Describe "PSElectricityMaps.Tests" {
             $getModule | Should -Not -BeNullOrEmpty
             $getModule | Should -BeOfType 'System.Management.Automation.PSModuleInfo'
             $getModule.RootModule | Should -Be "PSElectricityMaps.psm1"
-            $getModule.Version | Should -Match "^\d+\.\d+\.\d+\.\d+$"
+            $getModule.Version | Should -Match "^\d+\.\d+\.\d+$"
             $getModule.GUID | Should -Not -BeNullOrEmpty
         }
     }   
