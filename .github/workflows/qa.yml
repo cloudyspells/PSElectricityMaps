@@ -1,0 +1,98 @@
+# File: .github/workflows/qa.yml
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - 'main'
+      - 'releases/**'
+
+name: PowerShell Module Quality Assurance
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Login to Az PowerShell Module
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          enable-AzPSSession: true
+
+      - name: Run PSScriptAnalyzer
+        uses: microsoft/psscriptanalyzer-action@v1.0
+        with:
+          path: .\
+          recurse: true 
+          output: results.sarif
+          excludeRule: '"PSAvoidUsingPlainTextForPassword"'
+
+      - name: Run Pester tests
+        shell: pwsh
+        env:
+          SIGNALTOKEN: ${{ secrets.SIGNALTOKEN }}
+        run: |
+          Set-PSRepository PSGallery -InstallationPolicy Trusted
+          Install-Module Az.Resources
+          Import-Module Az.Resources
+          Import-Module Pester
+          $pConfig = New-PesterConfiguration
+          $pConfig.Run.Path = './tests/PSElectricityMaps.Tests'
+          $pConfig.Run.PassThru = $true
+          $pConfig.Output.CIFormat = 'GithubActions'
+          $pConfig.Output.Verbosity = 'Detailed'
+          $pConfig.TestResult.OutputFormat = 'JunitXml'
+          $pConfig.TestResult.OutputPath ='./tests/junit.xml'
+          $pConfig.TestResult.Enabled = $true
+          $pConfig.CodeCoverage.Enabled = $true
+          $pConfig.CodeCoverage.OutputFormat = 'JaCoCo'
+          $pConfig.CodeCoverage.OutputPath = './tests/coverage.xml'
+          $pConfig.CodeCoverage.Path = './src/PSElectricityMaps/PSElectricityMaps.psm1'
+          $p = Invoke-Pester -Configuration $pConfig
+          Write-Output "## Pester Test Results" >> $env:GITHUB_STEP_SUMMARY
+          Write-Output "" >> $env:GITHUB_STEP_SUMMARY
+          Write-Output "- Code coverage: **$($p.CodeCoverage.CoveragePercent)**" >> $env:GITHUB_STEP_SUMMARY
+          Write-Output "- Commands Executed: **$($p.CodeCoverage.CommandsExecutedCount)**" >> $env:GITHUB_STEP_SUMMARY
+          Write-Output "- Commands Missed: **$($p.CodeCoverage.CommandsMissedCount)**" >> $env:GITHUB_STEP_SUMMARY
+          Write-Output "" >> $env:GITHUB_STEP_SUMMARY
+          Write-Output "|Block|Test|Duration|Result|" >> $env:GITHUB_STEP_SUMMARY
+          Write-Output "|---|---|---|---|" >> $env:GITHUB_STEP_SUMMARY
+          $p.Tests | ForEach-Object {
+            $mdTestResult = ""
+            If($_.Result -eq 'Failed') {
+              $mdTestResult = ":boom: Failed"
+            }
+            ElseIf($_.Result -eq 'Passed') {
+              $mdTestResult = ":green_heart: Passed"
+            }
+            Else {
+              $mdTestResult = ":nerd_face: $($_.Result)"
+            }
+            Write-Output "|$($_.Block)|$($_.Name)|$($_.Duration)|$($mdTestResult)|"
+          } >> $env:GITHUB_STEP_SUMMARY
+          Write-Output "" >> $env:GITHUB_STEP_SUMMARY
+      - name: Test the Module Manifest
+        shell: pwsh
+        run: Test-ModuleManifest -Path ./src/PSElectricityMaps/PSElectricityMaps.psd1
+
+      - name: Run the GitHub action in this commit
+        uses: ./
+        id: signal_action
+        with:
+          azure_credential: ${{ secrets.AZURE_CREDENTIALS }}
+          signal_token: ${{ secrets.SIGNALTOKEN }}
+          regions: '"westeurope","northeurope","uksouth","francecentral","germanynorth"'
+
+      - name: Echo region from action
+        run: |
+          echo 'Best emissions region: ${{ steps.signal_action.outputs.region }}'
+          echo 'Best emissions fossil fuel percent: ${{ steps.signal_action.outputs.fossilFuelPercentage }}'
+      - name: Upload test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: unit-tests
+          path: ./tests/*.xml
+        if: ${{ always() }}

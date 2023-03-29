@@ -1,0 +1,61 @@
+# File: .github/workflows/wiki.yml
+
+on:
+  release:
+    types:
+      - "published"
+  workflow_dispatch:
+
+name: Publish Wiki
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  build-publish-wiki:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout PSElectricityMaps
+        uses: actions/checkout@v3
+        with:
+          path: main
+
+      - name: Checkout Wiki
+        uses: actions/checkout@v3
+        with:
+          repository: ${{github.repository}}.wiki
+          path: wiki
+
+      - name: Copy wiki base sources
+        shell: bash
+        run: |
+          cp ./main/docs/wiki-src/*.md ./wiki/
+      - name: Login to Az PowerShell Module
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          enable-AzPSSession: true
+
+      - name: Generate Module docs
+        shell: pwsh
+        run: |
+          Set-PSRepository PSGallery -InstallationPolicy Trusted
+          Install-Module Az.Resources
+          Install-Module PlatyPS
+          Import-Module PlatyPS
+          Import-Module ./main/src/PSElectricityMaps
+          New-MarkdownHelp -Module PSElectricityMaps `
+            -Verbose `
+            -Force `
+            -NoMetadata `
+            -OutputFolder ./wiki/
+      - name: Commit and push changes to wiki
+        shell: bash
+        working-directory: ./wiki
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "generated docs from actions workflow"
+          git push

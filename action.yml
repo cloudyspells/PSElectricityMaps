@@ -1,0 +1,46 @@
+name: 'PSElectricityMaps for Azure regions'
+description: 'Get Azure region with optimal carbon emissions from a given set'
+author: 'Roderick Bant'
+branding:
+  icon: 'loader'
+  color: 'green'
+inputs:
+  azure_credential:
+    description: Azure credential secret for azure/login@v1 action
+    required: true
+  regions:
+    description: Comma seperated list of Azure regions to check for current emissions
+    required: false
+    default: '"westeurope","northeurope"'
+  signal_token:
+    description: Auth token from CO2 Signal
+    required: true
+outputs:
+  region:
+    description: Azure region with the best emissions
+    value: ${{ steps.invokesignal.outputs.region}}
+  fossilFuelPercentage:
+    description: Percentage of fossil fuel carbon emissions
+    value: ${{ steps.invokesignal.outputs.FossilFuelPercentage }}
+runs:
+  using: composite
+  steps:
+    - id: azurelogin
+      uses: azure/login@v1
+      with:
+        creds: ${{ inputs.azure_credential }}
+        enable-AzPSSession: true
+    - id: invokesignal
+      shell: pwsh
+      run: |
+        Set-PSRepository PSGallery -InstallationPolicy Trusted
+        Install-Module Az.Resources
+        Import-Module Az.Resources
+        Import-Module ${{ github.action_path }}/src/PSElectricityMaps
+        $result = Get-ElectricityMapsBestAzureRegion -Regions ${{ inputs.regions }} -AuthToken ${{ inputs.signal_token }}
+        "region=$($result.Region)" >> $env:GITHUB_OUTPUT
+        "fossilFuelPercentage=$($result.FossilFuelPercentage)" >> $env:GITHUB_OUTPUT
+        Write-Output "### PSElectricityMaps Azure Region selection" >> $env:GITHUB_STEP_SUMMARY
+        Write-Output "" >> $env:GITHUB_STEP_SUMMARY
+        Write-Output "- Azure region with lowest emissions: **$($result.Region)**" >> $env:GITHUB_STEP_SUMMARY
+        Write-Output "- Fossil fuel percentage: **$($result.FossilFuelPercentage)**" >> $env:GITHUB_STEP_SUMMARY
