@@ -1,5 +1,5 @@
 PSElectricityMaps Wiki
-================
+======================
 
 PowerShell module for [ElectricityMaps.com](https://www.ElectricityMaps.com/) API
 -------------------------------------------------------------------
@@ -28,3 +28,8 @@ action.
 For a real-world solution with a commercial data provider, check out
 the [carbon-aware-sdk](https://github.com/Green-Software-Foundation/carbon-aware-sdk)
 by the [Green Software Foundation](https://greensoftware.foundation/)
+
+**NOTE:** ElectricityMaps is currently migrating from 
+[co2signal.com](http://www.co2signal.com). Until migration is finished you will
+have to register a new account there. The module's API calls also still point to
+_co2signal.com_ and will be updated by the author as migration proceeds.
