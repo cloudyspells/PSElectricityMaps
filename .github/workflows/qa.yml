@@ -23,7 +23,7 @@ jobs:
           enable-AzPSSession: true
 
       - name: Run PSScriptAnalyzer
-        uses: microsoft/psscriptanalyzer-action@v1.0
+        uses: microsoft/psscriptanalyzer-action@v1.1
         with:
           path: .\
           recurse: true 
